@@ -29,21 +29,21 @@ group by nome,tipo
 order by count(*)  desc
 
 --------------------------------------------
-INSERT assistidos   (filme, dataehora) VALUES  
+INSERT assistidos (filme, dataehora) VALUES  
    (
 	   ( select id_filme from filmes where nome = 'Matrix'),
 	   '2020-01-01 10:00:00.000'
    ); 
-   INSERT assistidos   (filme, dataehora) VALUES  
-   (
-	   ( select id_filme from filmes where nome = 'Matrix'),
-	   '2020-01-02 10:00:00.000'
-   ); 
-      INSERT assistidos   (filme, dataehora) VALUES  
-   (
-	   ( select id_filme from filmes where nome = 'Matrix'),
-	   '2020-01-03 10:00:00.000'
-   ); 
+INSERT assistidos (filme, dataehora) VALUES  
+(
+   ( select id_filme from filmes where nome = 'Matrix'),
+   '2020-01-02 10:00:00.000'
+); 
+  INSERT assistidos (filme, dataehora) VALUES  
+(
+   ( select id_filme from filmes where nome = 'Matrix'),
+   '2020-01-03 10:00:00.000'
+); 
 
 --------------------------------------------------
 INSERT assistidos  
@@ -53,12 +53,12 @@ VALUES
 	   ( select id_serie from series where nome = 'Avatar: A Lenda de Aang'),
 	   '2020-01-02 10:00:00.000'
    ); 
-   INSERT assistidos  
-   (serie, dataehora)  
+INSERT assistidos  
+	(serie, dataehora)  
 VALUES  
-   (
-	   ( select id_serie from series where nome = 'Avatar: A Lenda de Aang'),
-	   '2020-01-03 10:00:00.000'
-   ); 
+(
+   ( select id_serie from series where nome = 'Avatar: A Lenda de Aang'),
+   '2020-01-03 10:00:00.000'
+); 
 
 

@@ -11,9 +11,12 @@ use BancoProway;
    from episodios e
    inner join temporadas t on t.id_temporada= e.temporada
    inner join series s on s.id_serie=t.serie
-   order by s.nome,t.sequencial,e.sequencial
+   order by s.nome,t.sequencial,e.sequencial 
 
 
+   select * from series ;
+   
+   
    --conta as temporadas de cada serie
 	select s.nome, count(*)as temporadas
 	from series s
@@ -48,8 +51,8 @@ VALUES
 			inner join series s on s.id_serie=t.serie and s.nome = 'Ajin: Demi-Human'
 		)
 	); 
-
-
+	
+  
 	
 
 --incrementa um episodio na temporada da serie
