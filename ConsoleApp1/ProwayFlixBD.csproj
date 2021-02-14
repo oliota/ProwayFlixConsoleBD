@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BDUtils.cs" />
     <Compile Include="Business\Interface\ICadastro.cs" />
     <Compile Include="Business\Interface\ICadastroItem.cs" />
     <Compile Include="Business\Interface\IMenu.cs" />
