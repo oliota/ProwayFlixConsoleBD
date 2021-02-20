@@ -6,9 +6,10 @@ namespace ConsoleApp1.Model.Repositorio
     {
         bool Adicionar(object item);
         bool Editar(object item,object original);
-        bool Deletar(object item);
-        List<object> Listar(bool metodo);
+        bool Deletar(object item); 
         void Listar();
         object Buscar(object item);
+
+        void Salvar();
     }
 }

@@ -2,11 +2,12 @@
 using ConsoleApp1.Model;
 using ConsoleApp1.Model.Repositorio;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace ConsoleApp1.Business
 {
-    public class Login  
+    public class Login
     {
         protected enum Opcoes
         {
@@ -14,40 +15,38 @@ namespace ConsoleApp1.Business
             Entrar = 1,
             Cadastrar = 2
         }
-        protected UsuarioModel Usuario { get; set; }
-        protected int Tentativas { get; set; }
-
-
-
+        protected usuarios Usuario { get; set; } 
+         
         public void FormularioEntrar()
         {
-            Usuario = new UsuarioModel();
-            Tentativas = 3;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("Informe o Logon");
-                Usuario.Logon = Console.ReadLine();
+            Usuario = new usuarios();
 
-                Console.WriteLine("Informe a Senha");
-                Usuario.Senha = Console.ReadLine();
-                if (--Tentativas == 0 && !ValidarEntrada())
-                    return;
-            } while (!ValidarEntrada() || Tentativas == 0);
-            Entrar();
+            Console.Clear();
+            Console.WriteLine("Informe o Logon");
+            Usuario.login = Console.ReadLine();
+
+            Console.WriteLine("Informe a Senha");
+            Usuario.senha = Console.ReadLine(); 
+            if (ValidarEntrada())
+                Entrar();
         }
 
         public bool ValidarEntrada()
         {
-            var select = (UsuarioModel)new UsuarioREP().Buscar(Usuario.Logon, Usuario.Senha);
+            var select = Repositorios.banco.usuarios
+                      .Where(s => s.login.Equals(Usuario.login))
+                      .Where(s => s.senha.Equals(Usuario.senha))
+                      .FirstOrDefault<usuarios>();
+
+
             if (select != null)
             {
                 Usuario = select;
                 return true;
             }
             else
-            { 
-                Utils.Pausar($"Falha ao logar - tentativas restantes: {Tentativas}");
+            {
+                Utils.Pausar($"Falha ao logar");
                 return false;
             }
 
@@ -62,57 +61,62 @@ namespace ConsoleApp1.Business
 
         public void FormularioCadastrar()
         {
-            Usuario = new UsuarioModel();
-            Tentativas = 3;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("Informe o Nome");
-                Usuario.Nome = Console.ReadLine();
+            Usuario = new usuarios();
 
-                Console.WriteLine("Informe o Email");
-                Usuario.Email = Console.ReadLine();
+            Console.Clear();
+            Console.WriteLine("Informe o Nome");
+            Usuario.nome = Console.ReadLine();
 
-                Console.WriteLine("Informe o Logon");
-                Usuario.Logon = Console.ReadLine();
+            Console.WriteLine("Informe o Email");
+            Usuario.email = Console.ReadLine();
 
-                Console.WriteLine("Informe a Senha");
-                Usuario.Senha = Console.ReadLine();
-                if (--Tentativas == 0)
-                    return;
-            } while (!ValidarCadastro() || Tentativas == 0);
-            Cadastrar();
+            Console.WriteLine("Informe o Logon");
+            Usuario.login = Console.ReadLine();
+
+            Console.WriteLine("Informe a Senha");
+            Usuario.senha = Console.ReadLine();
+
+            Usuario.perfis = Repositorios.banco.perfis.Where(x => x.nome.Equals("Usuário")).SingleOrDefault();
+
+            if (ValidarCadastro())
+                Cadastrar();
 
         }
 
         public bool ValidarCadastro()
         {
             var MensagemErro = new StringBuilder();
-            if (string.IsNullOrWhiteSpace(Usuario.Nome))
+            if (string.IsNullOrWhiteSpace(Usuario.nome))
                 MensagemErro.AppendLine($"Nome não pode ficar em branco");
-            if (string.IsNullOrWhiteSpace(Usuario.Email))
+            if (string.IsNullOrWhiteSpace(Usuario.email))
                 MensagemErro.AppendLine($"Email não pode ficar em branco");
-            if (string.IsNullOrWhiteSpace(Usuario.Logon))
+            if (string.IsNullOrWhiteSpace(Usuario.login))
                 MensagemErro.AppendLine($"Logon não pode ficar em branco");
-            if (string.IsNullOrWhiteSpace(Usuario.Senha))
+            if (string.IsNullOrWhiteSpace(Usuario.senha))
                 MensagemErro.AppendLine($"Senha não pode ficar em branco");
-            if (new UsuarioREP().Buscar(Usuario)!=null)
-                MensagemErro.AppendLine($"Já existe um usuario com o email {Usuario.Email}");
+            if (Repositorios.banco
+                .usuarios
+                .Where(x => x.email.Equals(Usuario.email))
+                .Any()
+                )
+                MensagemErro.AppendLine($"Já existe um usuario com o email {Usuario.email}");
 
             if (!string.IsNullOrWhiteSpace(MensagemErro.ToString()))
             {
-                Console.WriteLine(MensagemErro.ToString());  
-                Utils.Pausar($"Falha ao cadastrar - tentativas restantes: {Tentativas}");
-                return false; 
+                Console.WriteLine(MensagemErro.ToString());
+                Utils.Pausar($"Falha ao cadastrar");
+                return false;
             }
 
             return true;
         }
-         
+
         public void Cadastrar()
         {
-            new UsuarioREP().Adicionar(Usuario); 
-        } 
+            //new UsuarioREP().Adicionar(Usuario);
+            Repositorios.banco.usuarios.Add(Usuario);
+            Repositorios.banco.SaveChanges();
+        }
 
     }
 }

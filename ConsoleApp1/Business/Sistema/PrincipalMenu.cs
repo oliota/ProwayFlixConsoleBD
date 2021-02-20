@@ -40,13 +40,13 @@ namespace ConsoleApp1.Business.Sistema
                     new UsuariosMenu().ExibirMenu();
                     break;
                 case Opcoes.Filmes:
-                    new FilmesMenu().ExibirMenu();
+                    //new FilmesMenu().ExibirMenu();
                     break;
                 case Opcoes.Series:
-                    new SeriesMenu().ExibirMenu();
+                    //new SeriesMenu().ExibirMenu();
                     break;
                 case Opcoes.Assistidos:
-                    new AssistidosMenu().ExibirMenu();
+                    //new AssistidosMenu().ExibirMenu();
                     break;
                 case Opcoes.Relatorios:
                     Console.WriteLine("Menu de relatorios");
@@ -75,7 +75,7 @@ namespace ConsoleApp1.Business.Sistema
                 ExecutarEscolha(Opcoes.Sair);
                 return;
             }
-            Console.WriteLine($"Bem vindo, {Repositorios.UsuarioLogado.Nome}");
+            Console.WriteLine($"Bem vindo, {Repositorios.UsuarioLogado.nome}");
             Console.WriteLine("Menu de principal, escolha uma opção:");
             foreach (var item in Enum.GetValues(typeof(Opcoes)))
                 Console.WriteLine($"\t {(int)item} : {item}");
